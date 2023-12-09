@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>手机网页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: MyCustomFont, Arial, sans-serif;
+        }
+
+        button {
+            font-family: MyCustomFont, Arial, sans-serif;
+            padding: 10px 20px;
+            font-size: 30px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            /* 设置按钮宽度 */
+            height: 50px;
+            /* 设置按钮高度 */
+            margin: 0 auto;
+            /* 居中 */
+        }
+
+        button.hide {
+            display: none;
+        }
+
+        #output {
+            font-family: MyCustomFont, Arial, sans-serif;
+            margin-top: 20px;
+            font-size: 35px;
+            writing-mode: vertical-rl;
+            /* 添加竖排样式 */
+            animation: fade-in 2s ease-in-out;
+            /* 添加动画效果 */
+            display: block;
+            /* 初始显示 */
+        }
+
+        #output.hide {
+            display: none;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @font-face {
+            font-family: MyCustomFont;
+            src: url('./misc/MyFont.ttf') format('truetype');
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            button {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onclick="toggleText()">
+    <button id="toggleButton" onclick="event.stopPropagation(); toggleText()">卜</button>
+    <div id="output"></div>
+
+    <script>
+        var toggleButton = document.getElementById("toggleButton");
+        var outputElement = document.getElementById("output");
+
+        function toggleText() {
+            console.log("点击事件已触发");
+            if (outputElement.classList.contains("hide")) {
+                outputElement.classList.remove("hide");
+                toggleButton.classList.add("hide");
+            } else {
+                fetch('./misc/1.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        var randomIndex = Math.floor(Math.random() * data.length);
+                        var randomText = data[randomIndex].text;
+                        outputElement.innerHTML = randomText;
+                        outputElement.style.animation = 'none';
+                        setTimeout(() => {
+                            outputElement.style.animation = '';
+                        }, 10);
+                    });
+                outputElement.classList.add("hide");
+                toggleButton.classList.remove("hide");
+            }
+        }
+    </script>
+</body>
+
+</html>
